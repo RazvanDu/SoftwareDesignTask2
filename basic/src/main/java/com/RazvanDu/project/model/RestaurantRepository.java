@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.RazvanDu.project;
+package com.RazvanDu.project.model;
 
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.Optional;
 
 /**
  * @author Greg Turnquist
  */
 // tag::code[]
-public interface EmployeeRepository extends CrudRepository<Employee, Long> { // <1>
+public interface RestaurantRepository extends CrudRepository<Restaurant, Long> { // <1>
+
+    Optional<Restaurant> findByName(String name);
 
 }
 // end::code[]

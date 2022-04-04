@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.RazvanDu.project;
+package com.RazvanDu.project.model;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.Optional;
 
 /**
  * @author Greg Turnquist
  */
 // tag::code[]
-@Controller // <1>
-public class HomeController {
+public interface UserRepository extends CrudRepository<User, Long> { // <1>
 
-	@RequestMapping(value = "/") // <2>
-	public String index() {
-		return "index"; // <3>
-	}
+    Optional<User> findByName(String name);
 
 }
 // end::code[]

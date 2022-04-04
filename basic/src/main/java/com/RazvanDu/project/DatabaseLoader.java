@@ -15,27 +15,26 @@
  */
 package com.RazvanDu.project;
 
+import com.RazvanDu.project.model.UserRepository;
+import com.RazvanDu.project.model.User;
+import com.RazvanDu.project.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
-@Component // <1>
+@Component
 public class DatabaseLoader implements CommandLineRunner { // <2>
 
-	private final EmployeeRepository repository;
+	private final UserRepository repository;
 
-	@Autowired // <3>
-	public DatabaseLoader(EmployeeRepository repository) {
+	@Autowired
+	public DatabaseLoader(UserRepository repository) {
 		this.repository = repository;
 	}
 
 	@Override
 	public void run(String... strings) throws Exception { // <4>
-		this.repository.save(new Employee("Frodo", "Baggins", "ring bearer"));
+        System.out.println(repository.findByName("uhu"));
+		//this.repository.save(new User("Frodo", "Baggins", "ring bearer"));
 	}
 }
-// end::code[]
