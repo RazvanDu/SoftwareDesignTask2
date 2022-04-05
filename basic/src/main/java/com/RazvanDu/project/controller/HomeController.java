@@ -341,6 +341,17 @@ public class HomeController {
 
     }
 
+    @RequestMapping(value = "/database/addFood", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addOrdering(@RequestBody Food food, HttpServletRequest request, HttpServletResponse response) {
+        if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
+            return ResponseEntity.badRequest().build();
+        long id = ReactAndSpringDataRestApplication.loggedUsers.get(request.getSession()).getId();
+        Restaurant target = restaurantRepository.findByAdminID((int) id).get();
+        food.setRestaurantID(target.getId());
+        foodRepository.save(food);
+        return ResponseEntity.accepted().build();
+    }
+
 	@RequestMapping(value = "/dashboard")
 	public String dashboard() {
         System.out.println("On Dashboard");
@@ -374,6 +385,12 @@ public class HomeController {
 	@RequestMapping(value = "/order")
 	public String orderr() {
         System.out.println("On Order");
+	    return "index";
+	}
+
+	@RequestMapping(value = "/addFood")
+	public String addFood() {
+        System.out.println("On Add Food");
 	    return "index";
 	}
 

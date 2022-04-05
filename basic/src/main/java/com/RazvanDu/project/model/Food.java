@@ -12,14 +12,16 @@ public class Food {
     private String description;
     private Integer price;
     private Integer category;
+    private Integer restaurantID;
 
     //private List<Restaurant> restaurants;
 
-    public Food(String name, String description, Integer price, Integer category) {
+    public Food(String name, String description, Integer price, Integer category, Integer restaurantID) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
+        this.restaurantID = restaurantID;
     }
 
     public Food() {
@@ -76,6 +78,16 @@ public class Food {
 
     public void setCategory(Integer category) {
         this.category = category;
+    }
+
+    @Basic
+    @Column(name = "restaurantID")
+    public Integer getRestaurantID() {
+        return restaurantID;
+    }
+
+    public void setRestaurantID(Integer restaurantID) {
+        this.restaurantID = restaurantID;
     }
 
     /*@ManyToMany(mappedBy = "foods")

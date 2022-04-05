@@ -25,4 +25,6 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
     Optional<Restaurant> findByName(String name);
 
+    Optional<Restaurant> findByAdminID(Integer adminID);
+
 }

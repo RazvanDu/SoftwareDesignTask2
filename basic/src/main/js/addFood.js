@@ -11,6 +11,7 @@ import Paper from '@mui/material/Paper';
 import Popup from 'reactjs-popup';
 import '../../../node_modules/reactjs-popup/dist/index.css';
 //import './main.css'
+import ReactTooltip from 'react-tooltip';
 
 import Modal from 'react-modal';
 
@@ -21,83 +22,124 @@ import { Navigate } from "react-router-dom";
 
 Modal.setAppElement('#react');
 
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
-
 function AddFood() {
 
-    const [foods, setFoods] = useState([]);
     const navigate = useNavigate()
 
-    const getData = async () => {
-        await fetch("http://localhost:8080/database/getCart").then(res => res.json()).then(res => {
-            setFoods(res);
-        })
+    const [breakfast, setBreakfast] = useState(true)
+    const [name, setName] = useState(false)
+    const [description, setDescription] = useState(false)
+    const [price, setPrice] = useState(false)
+
+    const [showModal, setShowModal] = useState(false);
+
+    const toggle = () => {
+        setBreakfast(!breakfast)
     }
 
     useEffect(() => {
-        getData()
-    },[]);
-
-    const [showModal, setShowModal] = useState(false);
+    }, []);
 
     return (
         <div>
             <TopBar/>
-            <OrderMenu foods={foods}/>
-            <button type="button" className="btn btn-success" onClick={() => {
-                setShowModal(true)
-                setTimeout(function() { //Start the timer
-                    setShowModal(false)
-                    navigate('/')
-                }.bind(this), 1500)
-                const requestOptions = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({})
-                };
-                fetch("http://localhost:8080/database/orderCart", requestOptions)
-            }}>
-                Order
-            </button>
 
-            <Modal onHide={() => setShowModal(false)} isOpen={showModal}>
-                <button type="button" class="btn btn-danger" onClick={() => {setShowModal(false)}}>close</button>
-                <h2>
-                    {"You order of --- has been sent!"}
-                </h2>
-            </Modal>
+
+
+            <Box style={{maxHeight: '100vh', overflow: 'auto'}} sx={{ flexGrow: 1 }}>
+                <Grid style={{maxHeight: '100vh', overflow: 'auto'}} container spacing={2}>
+
+
+                    <Grid item xs={3}>
+
+                        <button type="button" className="btn btn-primary" data-toggle="button" aria-pressed="false" onClick={() => {
+                            toggle()
+                        }}>
+                            {breakfast ? "Breakfast" : "Lunch"}
+                        </button>
+
+                    </Grid>
+
+                    <Grid item xs={2}>
+
+                    <input
+                            type="text"
+                            placeholder="Name of the Food"
+                            name="name"
+                            onChange={ev => setName(ev.target.value)}
+                        />
+
+                    </Grid>
+
+                    <Grid item xs={2}>
+
+                    <input
+                            type="text"
+                            placeholder="Description of the Food"
+                            name="description"
+                            onChange={ev => setDescription(ev.target.value)}
+                        />
+
+                    </Grid>
+
+                    <Grid item xs={2}>
+
+                    <input
+                            type="text"
+                            placeholder="Price of the Food"
+                            name="price"
+                            onChange={ev => setPrice(ev.target.value)}
+                        />
+
+                    </Grid>
+
+                    <Grid item xs={3}>
+
+                        <button type="button" className="btn btn-success" data-toggle="button" onClick={() => {
+
+
+                            const requestOptions = {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+
+                                    name: name,
+                                    description: description,
+                                    price: price,
+                                    category: (breakfast ? 0 : 1)
+
+                                })
+                            };
+
+                            fetch("http://localhost:8080/database/addFood", requestOptions)
+
+
+                            setShowModal(true)
+                            setTimeout(function() { //Start the timer
+                                setShowModal(false)
+                                navigate('/')
+                            }.bind(this), 1500)
+
+                        }}>
+                            Add
+                        </button>
+
+                        <Modal onHide={() => setShowModal(false)} isOpen={showModal}>
+                            <button type="button" class="btn btn-danger" onClick={() => {setShowModal(false)}}>close</button>
+                            <h2>
+                                "Successfully added the food!"
+                            </h2>
+                        </Modal>
+
+                    </Grid>
+
+
+                </Grid>
+            </Box>
+
+
 
         </div>
-    );
-}
-
-function OrderMenu({foods}) {
-
-    return (
-        <Box style={{maxHeight: '100vh', overflow: 'auto'}} sx={{ flexGrow: 1 }}>
-            <Grid style={{maxHeight: '100vh', overflow: 'auto'}} container spacing={2}>
-
-                {foods.map((food, i) => {
-
-                    return (<Grid item xs={12}>
-                            <Item> {i}</Item>
-                            <Item>{food.name}</Item>
-                            <Item>Description: {food.description}</Item>
-                            <Item>Costs: {food.price}</Item>
-                            <Item>Category: {food.category}</Item>
-                        </Grid>
-
-                    )
-                })}
-
-            </Grid>
-        </Box>
     );
 }
 

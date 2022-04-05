@@ -80,12 +80,13 @@ public class Restaurant {
         this.adminID = adminID;
     }
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    /*@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "foods_restaurant",
             joinColumns = { @JoinColumn(name = "RestaurantID", referencedColumnName = "id") },
             inverseJoinColumns = { @JoinColumn(name = "FoodID", referencedColumnName = "ID") }
-    )
+    )*/
+    @OneToMany(mappedBy = "restaurantID")
     public List<Food> getFoods() {
         return foods;
     }
