@@ -15,6 +15,7 @@
  */
 package com.RazvanDu.project;
 
+import com.RazvanDu.project.model.Food;
 import com.RazvanDu.project.model.User;
 import com.RazvanDu.project.model.UserRepository;
 import org.hibernate.SessionFactory;
@@ -27,17 +28,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
 @SpringBootApplication
 public class ReactAndSpringDataRestApplication {
 
     public static SessionFactory sessionFactory;
 
     public static HashMap<HttpSession, User> loggedUsers = new HashMap<>();
+    public static HashMap<Long, List<Food>> cart = new HashMap<>();
+    public static HashMap<Long, Integer> ordering = new HashMap<>();
 
     public static void main(String[] args) {
 		SpringApplication.run(ReactAndSpringDataRestApplication.class, args);
@@ -58,4 +58,3 @@ public class ReactAndSpringDataRestApplication {
     }
 
 }
-// end::code[]

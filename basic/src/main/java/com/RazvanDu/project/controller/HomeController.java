@@ -26,19 +26,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
 @Controller
-
 public class HomeController {
 
     private UserRepository userRepository;
@@ -132,10 +126,81 @@ public class HomeController {
         return ResponseEntity.notFound().build();
 	}
 
+	@RequestMapping(value = "/database/getCart")
+	public ResponseEntity<List<Food>> foodsById(HttpServletRequest request, HttpServletResponse response) {
+        if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
+            return ResponseEntity.badRequest().build();
+        long id = ReactAndSpringDataRestApplication.loggedUsers.get(request.getSession()).getId();
+        if(ReactAndSpringDataRestApplication.cart.containsKey(id))
+            return ResponseEntity.ok(ReactAndSpringDataRestApplication.cart.get(id));
+        return ResponseEntity.ok(new ArrayList<>());
+	}
+
+	@RequestMapping(value = "/database/addCart", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Food>> addToCart(@RequestBody Food food, HttpServletRequest request, HttpServletResponse response) {
+        if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
+            return ResponseEntity.badRequest().build();
+        long id = ReactAndSpringDataRestApplication.loggedUsers.get(request.getSession()).getId();
+        if(!ReactAndSpringDataRestApplication.cart.containsKey(id))
+            ReactAndSpringDataRestApplication.cart.put((id), new ArrayList<>());
+        //Optional<Food> food = foodRepository.findById(foodId);
+        //if(!food.isPresent())
+        //    return ResponseEntity.badRequest().build();
+        ReactAndSpringDataRestApplication.cart.get(id).add(food);
+        return ResponseEntity.accepted().build();
+	}
+
+	@RequestMapping(value = "/database/addOrdering", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Food>> addOrdering(@RequestBody Restaurant restaurant, HttpServletRequest request, HttpServletResponse response) {
+        if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
+            return ResponseEntity.badRequest().build();
+        long id = ReactAndSpringDataRestApplication.loggedUsers.get(request.getSession()).getId();
+        ReactAndSpringDataRestApplication.ordering.put(id, restaurant.getId());
+        System.out.println("Ordering from " + restaurant.getName() + "!");
+        return ResponseEntity.accepted().build();
+	}
+
+	@RequestMapping(value = "/database/getOrdering")
+	public ResponseEntity<Map<String, Integer>> orderingTarget(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Integer> mapp = new HashMap<>();
+        mapp.put("id", -1);
+        if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
+            return ResponseEntity.ok(mapp);
+        long id = ReactAndSpringDataRestApplication.loggedUsers.get(request.getSession()).getId();
+        if(!ReactAndSpringDataRestApplication.ordering.containsKey(id))
+            return ResponseEntity.ok(mapp);
+        mapp.put("id", ReactAndSpringDataRestApplication.ordering.get(id));
+        return ResponseEntity.ok(mapp);
+	}
+
 	@RequestMapping(value = "/database/restaurants/all")
 	public ResponseEntity<Iterable<Restaurant>> restaurants() {
         Iterable<Restaurant> restaurants = restaurantRepository.findAll();
         return ResponseEntity.ok(restaurants);
+	}
+
+	@RequestMapping(value = "/database/restaurants/allFilter/{name}")
+	public ResponseEntity<Iterable<Restaurant>> restaurants(@PathVariable String name) {
+        Iterable<Restaurant> restaurants = restaurantRepository.findAll();
+
+        if(name.equals("-1"))
+            return ResponseEntity.ok(restaurants);
+
+        List<Restaurant> result = new ArrayList<>();
+
+        for(Restaurant restaurant : restaurants) {
+            if(restaurant.getName().replaceAll(" ", "").toLowerCase().contains(name.toLowerCase().replaceAll(" ", "")))
+                result.add(restaurant);
+        }
+
+        return ResponseEntity.ok(result);
+	}
+
+	@RequestMapping(value = "/database/isLoggedIn")
+	public ResponseEntity<String> isLoggedIn(HttpServletRequest request, HttpServletResponse response) {
+        if(ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
+            return ResponseEntity.accepted().build();
+        return ResponseEntity.badRequest().build();
 	}
 
 	@RequestMapping(value = "/database/foods/all")
@@ -183,4 +248,3 @@ public class HomeController {
 	}
 
 }
-// end::code[]

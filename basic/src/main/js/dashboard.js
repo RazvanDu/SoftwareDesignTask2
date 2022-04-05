@@ -18,6 +18,8 @@ import {Grid} from '@mui/material';
 
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import Navbar from "react-bootstrap/Navbar";
+import {Container} from "react-bootstrap";
 
 Modal.setAppElement('#react');
 
@@ -31,36 +33,82 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function Dashboard() {
 
-    const [restaurants, setRestaurants] = useState([]);
     //const [foods, setFoods] = useState([]);
+
+    const [restaurants, setRestaurants] = useState([]);
+    const [search, setSearch] = useState([]);
+    const [logged, setLogged] = useState(false);
+    const [targetRestaurant, setTargetRestaurant] = useState(-1);
 
     const getData = async () => {
         await fetch("http://localhost:8080/database/restaurants/all").then(res => res.json()).then(res => {
             setRestaurants(res);
         })
-        /*await fetch("http://localhost:8080/database/foods/all").then(res => res.json()).then(res => {
-            setFoods(res);
-        })*/
+        let res = await fetch("http://localhost:8080/database/isLoggedIn")
+        if(res.status === 202) {
+            setLogged(true)
+        } else
+            setLogged(false)
     }
 
     useEffect(() => {
         getData()
     }, []);
 
+    useEffect(() => {
+
+        setInterval(() => {
+            fetch("http://localhost:8080/database/getOrdering").then(res => res.json()).then(res => {
+                setTargetRestaurant(res.id)
+            })
+        }, 500);
+
+    }, []);
+
+
+
     return (
         <div>
             <TopBar />
+
+            <Navbar>
+                <Container>
+                    <Navbar.Toggle />
+                    <Navbar.Collapse className="justify-content-end">
+                        <label>
+                            Restaurant Name:
+                            <input
+                                type="text"
+                                value={search}
+                                placeholder="Enter a name"
+                                onChange={e => {
+                                    setSearch(e.target.value)
+                                    var toSearch = e.target.value
+                                    if(toSearch === "")
+                                        toSearch = "-1"
+                                    fetch("http://localhost:8080/database/restaurants/allFilter/" + toSearch).then(res => res.json()).then(res => {
+                                        setRestaurants(res);
+                                    })
+                                    console.log("XDDD " + toSearch)
+                                }}
+                            />
+                        </label>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+
+
+
             <Box>
                 <Grid container spacing={2}>
                     {restaurants.map((restaurant, j) => {
-                        console.log("Entered");
                         return (<Grid item xs={3}>
                             <Item>{restaurant.name}</Item>
                             <Item>Located in: {restaurant.location}</Item>
                             <Item>You can order food in: {restaurant.delivery}</Item>
                             <Item>
                                 <div>
-                                    <RestaurantModal restaurant={restaurant}/>
+                                    <RestaurantModal restaurant={restaurant} logged={logged} targetRestaurant={targetRestaurant}/>
                                 </div>
 
                             </Item>
@@ -72,10 +120,9 @@ function Dashboard() {
     );
 }
 
-function RestaurantModal(restaurant) {
+function RestaurantModal({restaurant, logged, targetRestaurant}) {
     const [showModal, setShowModal] = useState(false);
-
-    const customStyles = {
+    /*const customStyles = {
         content: {
             top: "50%",
             left: "50%",
@@ -84,10 +131,13 @@ function RestaurantModal(restaurant) {
             marginRight: "-50%",
             transform: "translate(-50%, -50%)"
         }
-    };
+    };*/
 
     return (
-        <div key={restaurant.restaurant.id}>
+        <div key={restaurant.id}>
+
+
+            {(targetRestaurant === -1 || (targetRestaurant === restaurant.id)) &&
             <button type="button" class="btn btn-primary"
                 style={{ marginBottom: 10 }}
                 onClick={() => {
@@ -95,23 +145,27 @@ function RestaurantModal(restaurant) {
                 }}
             >
                 View Menu
-            </button>
+            </button>}
+
+
+
             <Modal onHide={() => setShowModal(false)} isOpen={showModal}>
                 <button type="button" class="btn btn-danger" onClick={() => {setShowModal(false)}}>close</button>
                 <h2>
-                    {restaurant.restaurant.name}
+                    {restaurant.name}
                 </h2>
-                <RestaurantMenu restaurant={restaurant.restaurant}/>
+                <RestaurantMenu restaurant={restaurant} logged={logged}/>
             </Modal>
         </div>)
 }
 
-function RestaurantMenu(restaurant) {
+function RestaurantMenu({restaurant, logged}) {
+    const [showModal, setShowModal] = useState(false);
     return (
         <Box style={{maxHeight: '100vh', overflow: 'auto'}} sx={{ flexGrow: 1 }}>
             <Grid style={{maxHeight: '100vh', overflow: 'auto'}} container spacing={2}>
 
-                {restaurant.restaurant.foods.map((food, i) => {
+                {restaurant.foods.map((food, i) => {
 
                     return (<Grid item xs={12}>
                             <Item> {i}</Item>
@@ -119,9 +173,57 @@ function RestaurantMenu(restaurant) {
                             <Item>Description: {food.description}</Item>
                             <Item>Costs: {food.price}</Item>
                             <Item>Category: {food.category}</Item>
-                            <button type="button" className="btn btn-success">
+                            <button type="button" className="btn btn-success" onClick={() => {
+                                const requestOptions = {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+
+                                        id: food.id,
+                                        name: food.name,
+                                        description: food.description,
+                                        price: food.price,
+                                        category: food.category
+
+                                    })
+                                };
+                                if(logged)
+                                    fetch("http://localhost:8080/database/addCart", requestOptions)
+
+                                const requestOptions2 = {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+
+                                        id: restaurant.id,
+                                        name: restaurant.name,
+                                        location: restaurant.location,
+                                        delivery: restaurant.delivery,
+                                        food: restaurant.foods
+
+                                    })
+                                };
+                                if(logged)
+                                    fetch("http://localhost:8080/database/addOrdering", requestOptions2)
+
+                                setShowModal(true)
+                                setTimeout(function() { //Start the timer
+                                    setShowModal(false)
+                                }.bind(this), 1500)
+                            }}>
                                 Order
                             </button>
+
+
+                            <Modal onHide={() => setShowModal(false)} isOpen={showModal}>
+                                <button type="button" class="btn btn-danger" onClick={() => {setShowModal(false)}}>close</button>
+                                <h2>
+                                    {logged && "Successfully ordered!"}
+                                    {!logged && "You need to be logged in!"}
+                                </h2>
+                            </Modal>
+
+
                         </Grid>
 
                     )
@@ -130,6 +232,27 @@ function RestaurantMenu(restaurant) {
             </Grid>
         </Box>
     );
+}
+
+function TemporaryModal() {
+    const [showModal, setShowModal] = useState(false);
+
+    useEffect(() => {
+        setShowModal(true)
+        setTimeout(function() { //Start the timer
+            setShowModal(false)
+        }.bind(this), 2000)
+    }, []);
+
+    return (
+        <div key="3">
+            <Modal onHide={() => setShowModal(false)} isOpen={showModal}>
+                <button type="button" class="btn btn-danger" onClick={() => {setShowModal(false)}}>close</button>
+                <h2>
+                    Successfully ordered!
+                </h2>
+            </Modal>
+        </div>)
 }
 
 export default Dashboard;

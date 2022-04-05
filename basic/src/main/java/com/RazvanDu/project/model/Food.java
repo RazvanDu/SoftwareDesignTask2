@@ -1,8 +1,6 @@
 package com.RazvanDu.project.model;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "food", schema = "sdassigment2", uniqueConstraints = {

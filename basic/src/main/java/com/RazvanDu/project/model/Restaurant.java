@@ -15,7 +15,6 @@ public class Restaurant {
     private List<Food> foods;
 
     public Restaurant(String name, String location, String delivery) {
-        //this.id = new Random().nextInt();
         this.name = name;
         this.location = location;
         this.delivery = delivery;

@@ -19,11 +19,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
 public interface FoodRepository extends CrudRepository<Food, Long> { // <1>
-
+    Optional<Food> findById(Integer id);
 }
-// end::code[]

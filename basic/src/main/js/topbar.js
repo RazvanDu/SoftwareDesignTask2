@@ -42,6 +42,7 @@ function TopBar() {
                     </Navbar.Text>
                     {user == null && <button type="button" class="btn btn-success" onClick={() => navigate('/login')}>Login</button>}
                     {user != null && <button type="button" class="btn btn-danger" onClick={() => navigate('/logout')}>Logout</button>}
+                    {user != null && <button type="button" class="btn btn-success" onClick={() => navigate('/cart')}>Cart</button>}
                     <button type="button" class="btn btn-primary" onClick={() => navigate('/signup')}>Signup</button>
                 </Navbar.Collapse>
             </Container>

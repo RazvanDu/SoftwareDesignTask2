@@ -19,10 +19,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface RestaurantRepository extends CrudRepository<Restaurant, Long> { // <1>
-
-    Optional<Restaurant> findById(Integer id);
-
-    Optional<Restaurant> findByName(String name);
-
+public interface OrderRespository extends CrudRepository<Food, Long> { // <1>
+    Optional<Food> findById(Integer id);
 }

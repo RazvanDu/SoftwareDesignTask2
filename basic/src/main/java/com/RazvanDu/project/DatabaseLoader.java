@@ -33,8 +33,7 @@ public class DatabaseLoader implements CommandLineRunner { // <2>
 	}
 
 	@Override
-	public void run(String... strings) throws Exception { // <4>
+	public void run(String... strings) throws Exception {
         System.out.println(repository.findByName("uhu"));
-		//this.repository.save(new User("Frodo", "Baggins", "ring bearer"));
 	}
 }

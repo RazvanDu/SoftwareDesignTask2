@@ -19,13 +19,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
 public interface UserRepository extends CrudRepository<User, Long> { // <1>
 
     Optional<User> findByName(String name);
 
 }
-// end::code[]
