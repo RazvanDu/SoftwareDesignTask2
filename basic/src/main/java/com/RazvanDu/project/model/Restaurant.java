@@ -1,6 +1,7 @@
 package com.RazvanDu.project.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "restaurant", schema = "sdassigment2", uniqueConstraints = {
@@ -9,13 +10,15 @@ public class Restaurant {
     private Integer id;
     private String name;
     private String location;
-    private String deliveryZones;
+    private String delivery;
 
-    public Restaurant(String name, String location, String deliveryZones) {
+    private List<Food> foods;
+
+    public Restaurant(String name, String location, String delivery) {
         //this.id = new Random().nextInt();
         this.name = name;
         this.location = location;
-        this.deliveryZones = deliveryZones;
+        this.delivery = delivery;
     }
 
     public Restaurant() {
@@ -45,13 +48,13 @@ public class Restaurant {
     }
 
     @Basic
-    @Column(name = "deliveryZones")
-    public String getDeliveryZones() {
-        return deliveryZones;
+    @Column(name = "delivery")
+    public String getDelivery() {
+        return delivery;
     }
 
-    public void setDeliveryZones(String deliveryZones) {
-        this.deliveryZones = deliveryZones;
+    public void setDelivery(String delivery) {
+        this.delivery = delivery;
     }
 
     @Basic
@@ -62,6 +65,20 @@ public class Restaurant {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "foods_restaurant",
+            joinColumns = { @JoinColumn(name = "RestaurantID", referencedColumnName = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "FoodID", referencedColumnName = "ID") }
+    )
+    public List<Food> getFoods() {
+        return foods;
+    }
+
+    public void setFoods(List<Food> foods) {
+        this.foods = foods;
     }
 
 }

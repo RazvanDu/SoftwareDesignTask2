@@ -23,11 +23,7 @@ import java.util.Optional;
  * @author Greg Turnquist
  */
 // tag::code[]
-public interface RestaurantRepository extends CrudRepository<Restaurant, Long> { // <1>
-
-    Optional<Restaurant> findById(Integer id);
-
-    Optional<Restaurant> findByName(String name);
+public interface FoodRepository extends CrudRepository<Food, Long> { // <1>
 
 }
 // end::code[]

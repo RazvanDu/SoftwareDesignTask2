@@ -16,10 +16,7 @@
 package com.RazvanDu.project.controller;
 
 import com.RazvanDu.project.ReactAndSpringDataRestApplication;
-import com.RazvanDu.project.model.Restaurant;
-import com.RazvanDu.project.model.RestaurantRepository;
-import com.RazvanDu.project.model.User;
-import com.RazvanDu.project.model.UserRepository;
+import com.RazvanDu.project.model.*;
 import org.apache.coyote.Response;
 import org.hibernate.Session;
 import org.springframework.http.MediaType;
@@ -46,10 +43,12 @@ public class HomeController {
 
     private UserRepository userRepository;
     private RestaurantRepository restaurantRepository;
+    private FoodRepository foodRepository;
 
-    public HomeController(UserRepository userRepository, RestaurantRepository restaurantRepository) {
+    public HomeController(UserRepository userRepository, RestaurantRepository restaurantRepository, FoodRepository foodRepository) {
         this.userRepository = userRepository;
         this.restaurantRepository = restaurantRepository;
+        this.foodRepository = foodRepository;
     }
 
 	@RequestMapping(value = "/")
@@ -125,10 +124,24 @@ public class HomeController {
         return ResponseEntity.notFound().build();
 	}
 
+	@RequestMapping(value = "/database/foodsByRestaurant/{id}")
+	public ResponseEntity<List<Food>> foodsById(@PathVariable Integer id) {
+        Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+        if(restaurant.isPresent())
+            return ResponseEntity.ok(restaurant.get().getFoods());
+        return ResponseEntity.notFound().build();
+	}
+
 	@RequestMapping(value = "/database/restaurants/all")
 	public ResponseEntity<Iterable<Restaurant>> restaurants() {
         Iterable<Restaurant> restaurants = restaurantRepository.findAll();
         return ResponseEntity.ok(restaurants);
+	}
+
+	@RequestMapping(value = "/database/foods/all")
+	public ResponseEntity<Iterable<Food>> foods() {
+        Iterable<Food> foods = foodRepository.findAll();
+        return ResponseEntity.ok(foods);
 	}
 
 	@RequestMapping(value = "/database/users/checkAndLogin/{name}/{pass}")
