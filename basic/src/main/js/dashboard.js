@@ -122,16 +122,6 @@ function Dashboard() {
 
 function RestaurantModal({restaurant, logged, targetRestaurant}) {
     const [showModal, setShowModal] = useState(false);
-    /*const customStyles = {
-        content: {
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            transform: "translate(-50%, -50%)"
-        }
-    };*/
 
     return (
         <div key={restaurant.id}>
@@ -160,73 +150,37 @@ function RestaurantModal({restaurant, logged, targetRestaurant}) {
 }
 
 function RestaurantMenu({restaurant, logged}) {
-    const [showModal, setShowModal] = useState(false);
     return (
         <Box style={{maxHeight: '100vh', overflow: 'auto'}} sx={{ flexGrow: 1 }}>
             <Grid style={{maxHeight: '100vh', overflow: 'auto'}} container spacing={2}>
 
-                {restaurant.foods.map((food, i) => {
+                <br/>
+                <h2 style={{  headline: {
+                        textAlign: 'center', // <-- the magic
+                        fontWeight: 'bold',
+                        fontSize: 18,
+                        marginTop: 0,
+                        width: 200,
+                        backgroundColor: 'yellow',
+                    }}}>
+                    Breakfast:
+                </h2>
+                {restaurant.foods.filter(food => food.category === 0).map((food, i) => {
+                    return (<RestaurantItem food={food} i={i} logged={logged} restaurant={restaurant}/>)
+                })}
 
-                    return (<Grid item xs={12}>
-                            <Item> {i}</Item>
-                            <Item>{food.name}</Item>
-                            <Item>Description: {food.description}</Item>
-                            <Item>Costs: {food.price}</Item>
-                            <Item>Category: {food.category}</Item>
-                            <button type="button" className="btn btn-success" onClick={() => {
-                                const requestOptions = {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-
-                                        id: food.id,
-                                        name: food.name,
-                                        description: food.description,
-                                        price: food.price,
-                                        category: food.category
-
-                                    })
-                                };
-                                if(logged)
-                                    fetch("http://localhost:8080/database/addCart", requestOptions)
-
-                                const requestOptions2 = {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-
-                                        id: restaurant.id,
-                                        name: restaurant.name,
-                                        location: restaurant.location,
-                                        delivery: restaurant.delivery,
-                                        food: restaurant.foods
-
-                                    })
-                                };
-                                if(logged)
-                                    fetch("http://localhost:8080/database/addOrdering", requestOptions2)
-
-                                setShowModal(true)
-                                setTimeout(function() { //Start the timer
-                                    setShowModal(false)
-                                }.bind(this), 1500)
-                            }}>
-                                Order
-                            </button>
-
-
-                            <Modal onHide={() => setShowModal(false)} isOpen={showModal}>
-                                <button type="button" class="btn btn-danger" onClick={() => {setShowModal(false)}}>close</button>
-                                <h2>
-                                    {logged && "Successfully ordered!"}
-                                    {!logged && "You need to be logged in!"}
-                                </h2>
-                            </Modal>
-
-
-                        </Grid>
-
-                    )
+                <h2 style={{  headline: {
+                        textAlign: 'center', // <-- the magic
+                        fontWeight: 'bold',
+                        fontSize: 18,
+                        marginTop: 0,
+                        width: 200,
+                        backgroundColor: 'yellow',
+                    }}}>
+                    Lunch:
+                </h2>
+                {restaurant.foods.filter(food => food.category === 1).map((food, i) => {
+                    return (<RestaurantItem food={food} i={i} logged={logged} restaurant={restaurant}/>)
                 })}
 
             </Grid>
@@ -234,25 +188,66 @@ function RestaurantMenu({restaurant, logged}) {
     );
 }
 
-function TemporaryModal() {
+function RestaurantItem({food, i, logged, restaurant}) {
     const [showModal, setShowModal] = useState(false);
+    return (<Grid item xs={12}>
+        <Item> {i}</Item>
+        <Item>{food.name}</Item>
+        <Item>Description: {food.description}</Item>
+        <Item>Costs: {food.price}</Item>
+        <Item>Category: {food.category}</Item>
+        <button type="button" className="btn btn-success" onClick={() => {
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
 
-    useEffect(() => {
-        setShowModal(true)
-        setTimeout(function() { //Start the timer
-            setShowModal(false)
-        }.bind(this), 2000)
-    }, []);
+                    id: food.id,
+                    name: food.name,
+                    description: food.description,
+                    price: food.price,
+                    category: food.category
 
-    return (
-        <div key="3">
-            <Modal onHide={() => setShowModal(false)} isOpen={showModal}>
-                <button type="button" class="btn btn-danger" onClick={() => {setShowModal(false)}}>close</button>
-                <h2>
-                    Successfully ordered!
-                </h2>
-            </Modal>
-        </div>)
+                })
+            };
+            if(logged)
+                fetch("http://localhost:8080/database/addCart", requestOptions)
+
+            const requestOptions2 = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+
+                    id: restaurant.id,
+                    name: restaurant.name,
+                    location: restaurant.location,
+                    delivery: restaurant.delivery,
+                    food: restaurant.foods
+
+                })
+            };
+            if(logged)
+                fetch("http://localhost:8080/database/addOrdering", requestOptions2)
+
+            setShowModal(true)
+            setTimeout(function() { //Start the timer
+                setShowModal(false)
+            }.bind(this), 1500)
+        }}>
+            Order
+        </button>
+
+
+        <Modal onHide={() => setShowModal(false)} isOpen={showModal}>
+            <button type="button" class="btn btn-danger" onClick={() => {setShowModal(false)}}>close</button>
+            <h2>
+                {logged && "Successfully added to you cart!"}
+                {!logged && "You need to be logged in!"}
+            </h2>
+        </Modal>
+
+
+    </Grid>)
 }
 
 export default Dashboard;

@@ -29,7 +29,7 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-function Cart() {
+function AddFood() {
 
     const [foods, setFoods] = useState([]);
     const navigate = useNavigate()
@@ -101,4 +101,4 @@ function OrderMenu({foods}) {
     );
 }
 
-export default Cart;
+export default AddFood;

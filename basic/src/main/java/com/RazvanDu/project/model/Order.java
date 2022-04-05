@@ -3,7 +3,7 @@ package com.RazvanDu.project.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "order", schema = "sdassigment2", uniqueConstraints = {
+@Table(name = "orderr", schema = "sdassigment2", uniqueConstraints = {
         @UniqueConstraint(columnNames = "id") })
 public class Order {
 
@@ -11,13 +11,14 @@ public class Order {
     private Integer restaurantID;
     private Integer userID;
     private String foodsOrdered;
-    private Integer status;
+    private Integer statusOrder;
+    private String restaurantName;
 
-    public Order(Integer restaurantID, Integer userID, String foodsOrdered, Integer status) {
+    public Order(Integer restaurantID, Integer userID, String foodsOrdered, Integer statusOrder) {
         this.restaurantID = restaurantID;
         this.userID = userID;
         this.foodsOrdered = foodsOrdered;
-        this.status = status;
+        this.statusOrder = statusOrder;
     }
 
     public Order() {
@@ -57,7 +58,7 @@ public class Order {
     }
 
     @Basic
-    @Column(name = "foodsOrdered")
+    @Column(name = "foods_ordered")
     public String getFoodsOrdered() {
         return foodsOrdered;
     }
@@ -67,13 +68,21 @@ public class Order {
     }
 
     @Basic
-    @Column(name = "status")
-    public Integer getStatus() {
-        return status;
+    @Column(name = "status_order")
+    public Integer getStatusOrder() {
+        return statusOrder;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setStatusOrder(Integer statusOrder) {
+        this.statusOrder = statusOrder;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
     }
 
 }

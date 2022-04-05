@@ -6,7 +6,9 @@ import Preferences from "./preferences";
 import Login from "./login";
 import Logout from "./logout";
 import Cart from "./cart";
+import Order from "./orders";
 import Signup from "./signup";
+import AddFood from "./addFood";
 
 const React = require('react');
 const ReactDOM = require('react-dom');
@@ -16,6 +18,8 @@ const dashboard = require('./dashboard');
 const preferences = require('./preferences');
 import { Button, Navbar } from 'react-bootstrap'
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 // end::vars[]
 
@@ -35,18 +39,38 @@ class App extends React.Component {
 	}*/
 
 	render() { // <3>
-		return (
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Dashboard />}/>
-                    <Route path="/login" element={<Login />}/>
-                    <Route path="/logout" element={<Logout />}/>
-                    <Route path="/signup" element={<Signup />}/>
-                    <Route path="/cart" element={<Cart />}/>
-                </Routes>
-            </BrowserRouter>
-		)
+		return (<ToFunctional/>)
 	}
+}
+
+function ToFunctional() {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        fetchMsg()
+    }, []);
+
+    const fetchMsg = () => {
+        axios.get('http://localhost:8080/database/loggedUser')
+            .then((res) => {
+                if(res.data) {
+                    setUser(res.data);
+                }
+            })
+            .catch(err => {});
+    }
+
+    return (<BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Dashboard />}/>
+            <Route path="/login" element={<Login />}/>
+            <Route path="/logout" element={<Logout />}/>
+            <Route path="/signup" element={<Signup />}/>
+            {user != null && <Route path="/cart" element={<Cart />}/>}
+            {user != null && <Route path="/order" element={<Order />}/>}
+            {user != null && (user.category === 1) && <Route path="/addFood" element={<AddFood />}/>}
+        </Routes>
+    </BrowserRouter>)
 }
 
 // tag::render[]

@@ -11,8 +11,12 @@ public class Restaurant {
     private String name;
     private String location;
     private String delivery;
+    private Integer adminID;
 
     private List<Food> foods;
+
+    private List<Food> breakfast;
+    private List<Food> lunch;
 
     public Restaurant(String name, String location, String delivery) {
         this.name = name;
@@ -64,6 +68,16 @@ public class Restaurant {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Basic
+    @Column(name = "adminID")
+    public Integer getAdminID() {
+        return adminID;
+    }
+
+    public void setAdminID(Integer adminID) {
+        this.adminID = adminID;
     }
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
