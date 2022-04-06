@@ -35,13 +35,8 @@ public class ReactAndSpringDataRestApplication {
 
     public static SessionFactory sessionFactory;
 
-    public static HashMap<HttpSession, User> loggedUsers = new HashMap<>();
-    public static HashMap<Long, List<Food>> cart = new HashMap<>();
-    public static HashMap<Long, Integer> ordering = new HashMap<>();
-
     public static void main(String[] args) {
 		SpringApplication.run(ReactAndSpringDataRestApplication.class, args);
-
         sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
     }
 
