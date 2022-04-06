@@ -190,6 +190,7 @@ function RestaurantMenu({restaurant, logged}) {
 
 function RestaurantItem({food, i, logged, restaurant}) {
     const [showModal, setShowModal] = useState(false);
+    const [pricee, setPricee] = useState(0);
     return (<Grid item xs={12}>
         <Item> {i}</Item>
         <Item>{food.name}</Item>
@@ -210,8 +211,12 @@ function RestaurantItem({food, i, logged, restaurant}) {
 
                 })
             };
-            if(logged)
-                fetch("http://localhost:8080/database/addCart", requestOptions)
+
+            if(logged) {
+                fetch("http://localhost:8080/database/addCart", requestOptions).then(res => res.json()).then(res => {
+                    setPricee(res.price)
+                })
+            }
 
             const requestOptions2 = {
                 method: 'POST',
@@ -241,7 +246,7 @@ function RestaurantItem({food, i, logged, restaurant}) {
         <Modal onHide={() => setShowModal(false)} isOpen={showModal}>
             <button type="button" class="btn btn-danger" onClick={() => {setShowModal(false)}}>close</button>
             <h2>
-                {logged && "Successfully added to you cart!"}
+                {logged && "Successfully added to you cart for a total price of " + pricee + "!"}
                 {!logged && "You need to be logged in!"}
             </h2>
         </Modal>

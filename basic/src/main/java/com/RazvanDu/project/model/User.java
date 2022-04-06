@@ -12,6 +12,7 @@ public class User {
     private String hash;
     private String email;
     private Integer type;
+    private Integer newAdmin;
 
     public User(String name, String hash, String email, Integer type) {
         //this.id = new Random().nextInt();
@@ -75,6 +76,14 @@ public class User {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getNewAdmin() {
+        return newAdmin;
+    }
+
+    public void setNewAdmin(Integer newAdmin) {
+        this.newAdmin = newAdmin;
     }
 
 }

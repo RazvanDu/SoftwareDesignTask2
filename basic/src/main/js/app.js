@@ -2,20 +2,20 @@
 
 // tag::vars[]
 import Dashboard from "./dashboard";
-import Preferences from "./preferences";
 import Login from "./login";
 import Logout from "./logout";
 import Cart from "./cart";
 import Order from "./orders";
 import Signup from "./signup";
 import AddFood from "./addFood";
+import ManageOrders from "./manageOrders";
+import CreateRestaurant from "./createRestaurant";
 
 const React = require('react');
 const ReactDOM = require('react-dom');
 const client = require('./client');
 const logout = require('./logout');
 const dashboard = require('./dashboard');
-const preferences = require('./preferences');
 import { Button, Navbar } from 'react-bootstrap'
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {useEffect} from "react";
@@ -49,7 +49,7 @@ function ToFunctional() {
 
     useEffect(() => {
         fetchMsg()
-    });
+    },[]);
 
     const fetchMsg = () => {
         axios.get('http://localhost:8080/database/loggedUser')
@@ -66,9 +66,12 @@ function ToFunctional() {
             <Route path="/login" element={<Login />}/>
             <Route path="/logout" element={<Logout />}/>
             <Route path="/signup" element={<Signup />}/>
+            <Route path="/signup" element={<Signup />}/>
             {/*user != null && */<Route path="/cart" element={<Cart />}/>}
             {/*user != null && */<Route path="/order" element={<Order />}/>}
             {/*user != null && (userRef.current.type === 1) && */<Route path="/addFood" element={<AddFood />}/>}
+            {/*user != null && (userRef.current.type === 1) && */<Route path="/manageOrders" element={<ManageOrders />}/>}
+            {/*user != null && (userRef.current.type === 1) && */<Route path="/createRestaurant" element={<CreateRestaurant />}/>}
         </Routes>
     </BrowserRouter>)
 }

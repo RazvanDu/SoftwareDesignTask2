@@ -13,6 +13,7 @@ public class Order {
     private String foodsOrdered;
     private Integer statusOrder;
     private String restaurantName;
+    private String userName;
 
     public Order(Integer restaurantID, Integer userID, String foodsOrdered, Integer statusOrder) {
         this.restaurantID = restaurantID;
@@ -83,6 +84,14 @@ public class Order {
 
     public void setRestaurantName(String restaurantName) {
         this.restaurantName = restaurantName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 }

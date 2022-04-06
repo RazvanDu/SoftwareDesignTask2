@@ -69,7 +69,7 @@ function Cart() {
             <Modal onHide={() => setShowModal(false)} isOpen={showModal}>
                 <button type="button" class="btn btn-danger" onClick={() => {setShowModal(false)}}>close</button>
                 <h2>
-                    {"You order of --- has been sent!"}
+                    {"You order of has been sent!"}
                 </h2>
             </Modal>
 

@@ -32,6 +32,7 @@
     "react": "^17.0.0",
     "react-bootstrap": "^2.2.2",
     "react-dom": "^17.0.0",
+    "react-dropdown": "^1.9.2",
     "react-modal": "^3.14.4",
     "react-router": "^6.3.0",
     "react-router-config": "^5.1.1",

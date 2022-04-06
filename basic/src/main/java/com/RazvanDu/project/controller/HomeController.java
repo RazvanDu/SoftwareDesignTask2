@@ -69,7 +69,18 @@ public class HomeController {
         if(ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
             user = ReactAndSpringDataRestApplication.loggedUsers.get(request.getSession());
 
-        System.out.println("... " + user);
+        if(user != null) {
+
+            if (user.getType() == 1) {
+                if (!restaurantRepository.findByAdminID(user.getId()).isPresent())
+                    user.setNewAdmin(1);
+                else
+                    user.setNewAdmin(0);
+            } else {
+                user.setNewAdmin(0);
+            }
+
+        }
 
         return ResponseEntity.ok(user);
     }
@@ -141,7 +152,7 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/database/addCart", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Food>> addToCart(@RequestBody Food food, HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<Map<String, Integer>> addToCart(@RequestBody Food food, HttpServletRequest request, HttpServletResponse response) {
         if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
         long id = ReactAndSpringDataRestApplication.loggedUsers.get(request.getSession()).getId();
@@ -151,7 +162,9 @@ public class HomeController {
         //if(!food.isPresent())
         //    return ResponseEntity.badRequest().build();
         ReactAndSpringDataRestApplication.cart.get(id).add(food);
-        return ResponseEntity.accepted().build();
+        Map<String, Integer> mapp = new HashMap<>();
+        mapp.put("price", ReactAndSpringDataRestApplication.cart.get(id).stream().mapToInt(Food::getPrice).sum());
+        return ResponseEntity.ok(mapp);
 	}
 
 	@RequestMapping(value = "/database/addOrdering", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -234,7 +247,37 @@ public class HomeController {
             return ResponseEntity.badRequest().build();
 
         return ResponseEntity.ok(target);
-	}
+
+    }
+
+    @RequestMapping(value = "/database/orders/admin")
+    public ResponseEntity<List<Order>> ordersByAdminId(HttpServletRequest request, HttpServletResponse response) {
+
+        if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
+            return ResponseEntity.badRequest().build();
+
+        int id = ReactAndSpringDataRestApplication.loggedUsers.get(request.getSession()).getId();
+
+        Restaurant restaurant = restaurantRepository.findByAdminID(id).get();
+
+        System.out.println("XDD " + restaurant.getName());
+
+        List<Order> orders = orderRespository.findAllByRestaurantID(restaurant.getId());
+
+        System.out.println("?? " + orders.size());
+
+        List<Order> targets = new ArrayList<>();
+
+        for(Order order : orders) {
+            if(order.getStatusOrder() == 1 || order.getStatusOrder() == 2 || order.getStatusOrder() == 3) {
+                order.setRestaurantName(restaurant.getName());
+                order.setUserName(userRepository.findById(order.getUserID()).get().getName());
+                targets.add(order);
+            }
+        }
+
+        return ResponseEntity.ok(targets);
+    }
 
     @RequestMapping(value = "/database/orders/old")
     public ResponseEntity<List<Order>> orderByIdOld(HttpServletRequest request, HttpServletResponse response) {
@@ -342,7 +385,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/database/addFood", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addOrdering(@RequestBody Food food, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> addFood(@RequestBody Food food, HttpServletRequest request, HttpServletResponse response) {
         if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
         long id = ReactAndSpringDataRestApplication.loggedUsers.get(request.getSession()).getId();
@@ -350,6 +393,50 @@ public class HomeController {
         food.setRestaurantID(target.getId());
         foodRepository.save(food);
         return ResponseEntity.accepted().build();
+    }
+
+    @RequestMapping(value = "/database/addRestaurant", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request, HttpServletResponse response) {
+        if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
+            return ResponseEntity.badRequest().build();
+        long id = ReactAndSpringDataRestApplication.loggedUsers.get(request.getSession()).getId();
+        restaurant.setAdminID((int) id);
+        restaurantRepository.save(restaurant);
+        return ResponseEntity.accepted().build();
+    }
+
+    @RequestMapping(path="/database/cancelOrder", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    //public ResponseEntity<User> newUser(@RequestBody String name, @RequestBody String hash, @RequestBody String email) {
+    public ResponseEntity<String> cancelOrder(@RequestBody Order order, HttpServletRequest request, HttpServletResponse response) {
+
+        //System.out.println(newUser);
+
+        if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
+            return ResponseEntity.badRequest().build();
+
+        order.setStatusOrder(5);
+
+        orderRespository.save(order);
+
+        return ResponseEntity.accepted().build();
+
+    }
+
+    @RequestMapping(path="/database/advanceOrder", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    //public ResponseEntity<User> newUser(@RequestBody String name, @RequestBody String hash, @RequestBody String email) {
+    public ResponseEntity<String> advanceOrder(@RequestBody Order order, HttpServletRequest request, HttpServletResponse response) {
+
+        //System.out.println(newUser);
+
+        if(!ReactAndSpringDataRestApplication.loggedUsers.containsKey(request.getSession()))
+            return ResponseEntity.badRequest().build();
+
+        order.setStatusOrder(Math.min(4, order.getStatusOrder()+1));
+
+        orderRespository.save(order);
+
+        return ResponseEntity.accepted().build();
+
     }
 
 	@RequestMapping(value = "/dashboard")
@@ -391,6 +478,12 @@ public class HomeController {
 	@RequestMapping(value = "/addFood")
 	public String addFood() {
         System.out.println("On Add Food");
+	    return "index";
+	}
+
+	@RequestMapping(value = "/manageOrders")
+	public String manageOrders() {
+        System.out.println("On Manage Orders");
 	    return "index";
 	}
 

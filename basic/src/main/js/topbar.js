@@ -21,7 +21,6 @@ function TopBar() {
     const fetchMsg = () => {
         axios.get('http://localhost:8080/database/loggedUser')
             .then((res) => {
-                console.log(res);
                 if(res.data) {
                     setMsg("Hello " + res.data.name + "!");
                     setUser(res.data);
@@ -44,7 +43,9 @@ function TopBar() {
                     {user != null && <button type="button" class="btn btn-danger" onClick={() => navigate('/logout')}>Logout</button>}
                     {user != null && <button type="button" class="btn btn-success" onClick={() => navigate('/cart')}>Cart</button>}
                     {user != null && <button type="button" class="btn btn-success" onClick={() => navigate('/order')}>Order</button>}
-                    {user != null && (user.type === 1) && <button type="button" class="btn btn-info" onClick={() => navigate('/addFood')}>Add Food</button>}
+                    {user != null && (user.type === 1) && (user.newAdmin === 0) && <button type="button" class="btn btn-info" onClick={() => navigate('/addFood')}>Add Food</button>}
+                    {user != null && (user.type === 1) && (user.newAdmin === 0) && <button type="button" class="btn btn-info" onClick={() => navigate('/manageOrders')}>Manage Orders</button>}
+                    {user != null && (user.type === 1) && (user.newAdmin === 1) && <button type="button" class="btn btn-info" onClick={() => navigate('/createRestaurant')}>Create Restaurant</button>}
                     <button type="button" class="btn btn-primary" onClick={() => navigate('/signup')}>Signup</button>
                 </Navbar.Collapse>
             </Container>
