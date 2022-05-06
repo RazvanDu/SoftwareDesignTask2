@@ -36,7 +36,7 @@ public class FoodController {
 
     @RequestMapping(value = "/database/addFood", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addFood(@RequestBody Food food, HttpServletRequest request, HttpServletResponse response) {
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
         long id = Utils.loggedUsers.get(request.getSession()).getId();
         Restaurant target = restaurantRepository.findByAdminID((int) id).get();

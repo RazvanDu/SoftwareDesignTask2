@@ -36,20 +36,20 @@ public class OrderController {
 
     @RequestMapping(value = "/database/getCart")
     public ResponseEntity<List<Food>> foodsById(HttpServletRequest request, HttpServletResponse response) {
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
         long id = Utils.loggedUsers.get(request.getSession()).getId();
-        if(Utils.cart.containsKey(id))
+        if (Utils.cart.containsKey(id))
             return ResponseEntity.ok(Utils.cart.get(id));
         return ResponseEntity.ok(new ArrayList<>());
     }
 
     @RequestMapping(value = "/database/addCart", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Integer>> addToCart(@RequestBody Food food, HttpServletRequest request, HttpServletResponse response) {
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
         long id = Utils.loggedUsers.get(request.getSession()).getId();
-        if(!Utils.cart.containsKey(id))
+        if (!Utils.cart.containsKey(id))
             Utils.cart.put((id), new ArrayList<>());
         //Optional<Food> food = foodRepository.findById(foodId);
         //if(!food.isPresent())
@@ -62,7 +62,7 @@ public class OrderController {
 
     @RequestMapping(value = "/database/addOrdering", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Food>> addOrdering(@RequestBody Restaurant restaurant, HttpServletRequest request, HttpServletResponse response) {
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
         long id = Utils.loggedUsers.get(request.getSession()).getId();
         Utils.ordering.put(id, restaurant.getId());
@@ -74,15 +74,15 @@ public class OrderController {
     public ResponseEntity<Map<String, Integer>> orderingTarget(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Integer> mapp = new HashMap<>();
         mapp.put("id", -1);
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.ok(mapp);
         long id = Utils.loggedUsers.get(request.getSession()).getId();
-        System.out.println(orderRespository.findCurrentOrder((int)id));
-        if(orderRespository.findCurrentOrder((int)id).isPresent()) {
+        System.out.println(orderRespository.findCurrentOrder((int) id));
+        if (orderRespository.findCurrentOrder((int) id).isPresent()) {
             mapp.put("id", 100000);
             return ResponseEntity.ok(mapp);
         }
-        if(!Utils.ordering.containsKey(id))
+        if (!Utils.ordering.containsKey(id))
             return ResponseEntity.ok(mapp);
         mapp.put("id", Utils.ordering.get(id));
         return ResponseEntity.ok(mapp);
@@ -91,7 +91,7 @@ public class OrderController {
     @RequestMapping(value = "/database/orders/get")
     public ResponseEntity<Order> orderById(HttpServletRequest request, HttpServletResponse response) {
 
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
 
         int id = Utils.loggedUsers.get(request.getSession()).getId();
@@ -100,14 +100,14 @@ public class OrderController {
 
         Order target = null;
 
-        for(Order order : orders) {
-            if(order.getStatusOrder() == 1 || order.getStatusOrder() == 2 || order.getStatusOrder() == 3) {
+        for (Order order : orders) {
+            if (order.getStatusOrder() == 1 || order.getStatusOrder() == 2 || order.getStatusOrder() == 3) {
                 target = order;
                 break;
             }
         }
 
-        if(target == null)
+        if (target == null)
             return ResponseEntity.badRequest().build();
 
         return ResponseEntity.ok(target);
@@ -117,7 +117,7 @@ public class OrderController {
     @RequestMapping(value = "/database/orders/admin")
     public ResponseEntity<List<Order>> ordersByAdminId(HttpServletRequest request, HttpServletResponse response) {
 
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
 
         int id = Utils.loggedUsers.get(request.getSession()).getId();
@@ -128,8 +128,8 @@ public class OrderController {
 
         List<Order> targets = new ArrayList<>();
 
-        for(Order order : orders) {
-            if(order.getStatusOrder() == 1 || order.getStatusOrder() == 2 || order.getStatusOrder() == 3) {
+        for (Order order : orders) {
+            if (order.getStatusOrder() == 1 || order.getStatusOrder() == 2 || order.getStatusOrder() == 3) {
                 order.setRestaurantName(restaurant.getName());
                 order.setUserName(userRepository.findById(order.getUserID()).get().getName());
                 targets.add(order);
@@ -142,7 +142,7 @@ public class OrderController {
     @RequestMapping(value = "/database/orders/old")
     public ResponseEntity<List<Order>> orderByIdOld(HttpServletRequest request, HttpServletResponse response) {
 
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
 
         int id = Utils.loggedUsers.get(request.getSession()).getId();
@@ -151,7 +151,7 @@ public class OrderController {
 
         List<Order> targets = new ArrayList<>();
 
-        for(Order order : orders) {
+        for (Order order : orders) {
             if (order.getStatusOrder() == 4 || order.getStatusOrder() == 5) {
                 order.setRestaurantName(restaurantRepository.findById(order.getRestaurantID()).get().getName());
                 targets.add(order);
@@ -187,18 +187,18 @@ public class OrderController {
         return ResponseEntity.ok(result);
     }*/
 
-    @RequestMapping(path="/database/orderCart", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/database/orderCart", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> orderCart(HttpServletRequest request, HttpServletResponse response) {
 
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
 
         long id = Utils.loggedUsers.get(request.getSession()).getId();
 
-        if(!Utils.cart.containsKey(id))
+        if (!Utils.cart.containsKey(id))
             return ResponseEntity.badRequest().build();
 
-        if(!Utils.ordering.containsKey(id))
+        if (!Utils.ordering.containsKey(id))
             return ResponseEntity.badRequest().build();
 
         Order newOrder = new Order(
@@ -217,13 +217,13 @@ public class OrderController {
 
     }
 
-    @RequestMapping(path="/database/cancelOrder", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/database/cancelOrder", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     //public ResponseEntity<User> newUser(@RequestBody String name, @RequestBody String hash, @RequestBody String email) {
     public ResponseEntity<String> cancelOrder(@RequestBody Order order, HttpServletRequest request, HttpServletResponse response) {
 
         //System.out.println(newUser);
 
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
 
         order.setStatusOrder(5);
@@ -234,16 +234,16 @@ public class OrderController {
 
     }
 
-    @RequestMapping(path="/database/advanceOrder", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/database/advanceOrder", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     //public ResponseEntity<User> newUser(@RequestBody String name, @RequestBody String hash, @RequestBody String email) {
     public ResponseEntity<String> advanceOrder(@RequestBody Order order, HttpServletRequest request, HttpServletResponse response) {
 
         //System.out.println(newUser);
 
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
 
-        order.setStatusOrder(Math.min(4, order.getStatusOrder()+1));
+        order.setStatusOrder(Math.min(4, order.getStatusOrder() + 1));
 
         orderRespository.save(order);
 

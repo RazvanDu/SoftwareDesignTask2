@@ -48,57 +48,57 @@ public class HomeController {
         this.orderRespository = orderRespository;
     }
 
-	@RequestMapping(value = "/")
-	public String index() {
-	    return "index";
-	}
+    @RequestMapping(value = "/")
+    public String index() {
+        return "index";
+    }
 
-	@RequestMapping(value = "/dashboard")
-	public String dashboard() {
+    @RequestMapping(value = "/dashboard")
+    public String dashboard() {
         System.out.println("On Dashboard");
-	    return "index";
-	}
+        return "index";
+    }
 
-	@RequestMapping(value = "/preferences")
-	public String preferences() {
+    @RequestMapping(value = "/preferences")
+    public String preferences() {
         System.out.println("On Preferences");
-	    return "index";
-	}
+        return "index";
+    }
 
-	@RequestMapping(value = "/login")
-	public String login() {
+    @RequestMapping(value = "/login")
+    public String login() {
         System.out.println("On Login");
-	    return "index";
-	}
+        return "index";
+    }
 
-	@RequestMapping(value = "/signup")
-	public String signup() {
+    @RequestMapping(value = "/signup")
+    public String signup() {
         System.out.println("On Signup");
-	    return "index";
-	}
+        return "index";
+    }
 
-	@RequestMapping(value = "/cart")
-	public String cart() {
+    @RequestMapping(value = "/cart")
+    public String cart() {
         System.out.println("On Cart");
-	    return "index";
-	}
+        return "index";
+    }
 
-	@RequestMapping(value = "/order")
-	public String orderr() {
+    @RequestMapping(value = "/order")
+    public String orderr() {
         System.out.println("On Order");
-	    return "index";
-	}
+        return "index";
+    }
 
-	@RequestMapping(value = "/addFood")
-	public String addFood() {
+    @RequestMapping(value = "/addFood")
+    public String addFood() {
         System.out.println("On Add Food");
-	    return "index";
-	}
+        return "index";
+    }
 
-	@RequestMapping(value = "/manageOrders")
-	public String manageOrders() {
+    @RequestMapping(value = "/manageOrders")
+    public String manageOrders() {
         System.out.println("On Manage Orders");
-	    return "index";
-	}
+        return "index";
+    }
 
 }

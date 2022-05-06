@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user", schema = "sdassigment2", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "id") })
+        @UniqueConstraint(columnNames = "id")})
 public class User {
     private Integer id;
     private String name;
@@ -29,7 +29,7 @@ public class User {
     @Id
     @Basic
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId() {
         return id;
     }

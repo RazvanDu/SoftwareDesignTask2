@@ -36,7 +36,7 @@ public class RestaurantController {
     @RequestMapping(value = "/database/foodsByRestaurant/{id}")
     public ResponseEntity<List<Food>> foodsById(@PathVariable Integer id) {
         Optional<Restaurant> restaurant = restaurantRepository.findById(id);
-        if(restaurant.isPresent())
+        if (restaurant.isPresent())
             return ResponseEntity.ok(restaurant.get().getFoods());
         return ResponseEntity.notFound().build();
     }
@@ -51,13 +51,13 @@ public class RestaurantController {
     public ResponseEntity<Iterable<Restaurant>> restaurantsFilter(@PathVariable String name) {
         Iterable<Restaurant> restaurants = restaurantRepository.findAll();
 
-        if(name.equals("-1"))
+        if (name.equals("-1"))
             return ResponseEntity.ok(restaurants);
 
         List<Restaurant> result = new ArrayList<>();
 
-        for(Restaurant restaurant : restaurants) {
-            if(restaurant.getName().replaceAll(" ", "").toLowerCase().contains(name.toLowerCase().replaceAll(" ", "")))
+        for (Restaurant restaurant : restaurants) {
+            if (restaurant.getName().replaceAll(" ", "").toLowerCase().contains(name.toLowerCase().replaceAll(" ", "")))
                 result.add(restaurant);
         }
 
@@ -72,7 +72,7 @@ public class RestaurantController {
 
     @RequestMapping(value = "/database/addRestaurant", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request, HttpServletResponse response) {
-        if(!Utils.loggedUsers.containsKey(request.getSession()))
+        if (!Utils.loggedUsers.containsKey(request.getSession()))
             return ResponseEntity.badRequest().build();
         long id = Utils.loggedUsers.get(request.getSession()).getId();
         restaurant.setAdminID((int) id);

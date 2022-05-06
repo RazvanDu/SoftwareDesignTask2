@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "orderr", schema = "sdassigment2", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "id") })
+        @UniqueConstraint(columnNames = "id")})
 public class Order {
 
     private Integer id;
@@ -29,7 +29,7 @@ public class Order {
     @Id
     @Basic
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId() {
         return id;
     }

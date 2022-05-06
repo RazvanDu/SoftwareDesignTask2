@@ -36,7 +36,7 @@ public class ReactAndSpringDataRestApplication {
     public static SessionFactory sessionFactory;
 
     public static void main(String[] args) {
-		SpringApplication.run(ReactAndSpringDataRestApplication.class, args);
+        SpringApplication.run(ReactAndSpringDataRestApplication.class, args);
         sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
     }
 

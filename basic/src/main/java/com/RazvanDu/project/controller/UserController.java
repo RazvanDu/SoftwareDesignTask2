@@ -31,12 +31,14 @@ public class UserController {
         this.restaurantRepository = restaurantRepository;
         this.foodRepository = foodRepository;
         this.orderRespository = orderRespository;
-    }@RequestMapping(value = "/logout")
+    }
+
+    @RequestMapping(value = "/logout")
     public ResponseEntity<User> logout(HttpServletRequest request, HttpServletResponse response) {
 
         System.out.println("LOGGING OUT!");
 
-        if(!Utils.loggedUsers.containsKey(request.getSession())) {
+        if (!Utils.loggedUsers.containsKey(request.getSession())) {
             System.out.println("CANNOT DELETE");
             return ResponseEntity.accepted().build();
         }
@@ -46,18 +48,18 @@ public class UserController {
 
     }
 
-    @RequestMapping(path="/database/signupUser", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/database/signupUser", method = POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> newUser(@RequestBody User newUser) {
 
         newUser.setType(0);
 
-        if(userRepository.findByName(newUser.getName()).isPresent())
+        if (userRepository.findByName(newUser.getName()).isPresent())
             return ResponseEntity.badRequest().build();
 
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(newUser.getEmail());
 
-        if(!mat.matches())
+        if (!mat.matches())
             return ResponseEntity.badRequest().build();
 
         return ResponseEntity.ok(userRepository.save(newUser));
@@ -67,7 +69,7 @@ public class UserController {
     @RequestMapping(value = "/database/users/findByName/{name}")
     public ResponseEntity<User> userByName(@PathVariable String name) {
         Optional<User> user = userRepository.findByName(name);
-        if(user.isPresent())
+        if (user.isPresent())
             return ResponseEntity.ok(user.get());
         return ResponseEntity.notFound().build();
     }
@@ -75,9 +77,9 @@ public class UserController {
     @RequestMapping(value = "/database/loggedUser")
     public ResponseEntity<User> loggedUser(HttpServletRequest request, HttpServletResponse response) {
         User user = null;
-        if(Utils.loggedUsers.containsKey(request.getSession()))
+        if (Utils.loggedUsers.containsKey(request.getSession()))
             user = Utils.loggedUsers.get(request.getSession());
-        if(user != null) {
+        if (user != null) {
             if (user.getType() == 1) {
                 if (!restaurantRepository.findByAdminID(user.getId()).isPresent())
                     user.setNewAdmin(1);
@@ -93,7 +95,7 @@ public class UserController {
     @RequestMapping(value = "/database/isLoggedIn")
     public ResponseEntity<String> isLoggedIn(HttpServletRequest request, HttpServletResponse response) {
         ResponseEntity<User> user = loggedUser(request, response);
-        if(user != null)
+        if (user != null)
             return ResponseEntity.accepted().build();
         return ResponseEntity.badRequest().build();
     }
@@ -101,7 +103,7 @@ public class UserController {
     @RequestMapping(value = "/database/users/checkAndLogin/{name}/{pass}")
     public ResponseEntity<User> checkAndLogin(@PathVariable String name, @PathVariable String pass, HttpServletRequest request, HttpServletResponse response) {
         Optional<User> user = userRepository.findByName(name);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             if (user.get().getHash().equals(pass)) {
                 //Session session = Utils.sessionFactory.openSession();
                 Utils.loggedUsers.put(request.getSession(), user.get());
