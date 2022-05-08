@@ -14,14 +14,14 @@ public class Food {
     private Integer category;
     private Integer restaurantID;
 
-    //private List<Restaurant> restaurants;
-
     public Food(String name, String description, Integer price, Integer category, Integer restaurantID) {
+
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
         this.restaurantID = restaurantID;
+
     }
 
     public Food() {
@@ -89,14 +89,5 @@ public class Food {
     public void setRestaurantID(Integer restaurantID) {
         this.restaurantID = restaurantID;
     }
-
-    /*@ManyToMany(mappedBy = "foods")
-    public List<Restaurant> getRestaurants() {
-        return restaurants;
-    }
-
-    public void setRestaurants(List<Restaurant> restaurants) {
-        this.restaurants = restaurants;
-    }*/
 
 }

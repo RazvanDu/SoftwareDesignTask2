@@ -1,7 +1,6 @@
 package com.RazvanDu.project.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "user", schema = "sdassigment2", uniqueConstraints = {
@@ -15,11 +14,12 @@ public class User {
     private Integer newAdmin;
 
     public User(String name, String hash, String email, Integer type) {
-        //this.id = new Random().nextInt();
+
         this.name = name;
         this.hash = hash;
         this.email = email;
         this.type = type;
+
     }
 
     public User() {

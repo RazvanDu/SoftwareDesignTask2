@@ -9,6 +9,7 @@ import Order from "./orders";
 import Signup from "./signup";
 import AddFood from "./addFood";
 import ManageOrders from "./manageOrders";
+import { HashRouter } from 'react-router-dom'
 import CreateRestaurant from "./createRestaurant";
 
 const React = require('react');
@@ -49,6 +50,9 @@ function ToFunctional() {
 
     useEffect(() => {
         fetchMsg()
+        setInterval(() => {
+            fetchMsg()
+        }, 500);
     },[]);
 
     const fetchMsg = () => {
@@ -60,18 +64,19 @@ function ToFunctional() {
             });
     }
 
-    return (<BrowserRouter>
+    return (<BrowserRouter forceRefresh={true}>
         <Routes>
             <Route path="/" element={<Dashboard />}/>
             <Route path="/login" element={<Login />}/>
             <Route path="/logout" element={<Logout />}/>
             <Route path="/signup" element={<Signup />}/>
             <Route path="/signup" element={<Signup />}/>
-            {/*user != null && */<Route path="/cart" element={<Cart />}/>}
-            {/*user != null && */<Route path="/order" element={<Order />}/>}
-            {/*user != null && (userRef.current.type === 1) && */<Route path="/addFood" element={<AddFood />}/>}
-            {/*user != null && (userRef.current.type === 1) && */<Route path="/manageOrders" element={<ManageOrders />}/>}
-            {/*user != null && (userRef.current.type === 1) && */<Route path="/createRestaurant" element={<CreateRestaurant />}/>}
+            {userRef.current != null && <Route path="/cart" element={<Cart />}/>}
+            {userRef.current != null && <Route path="/order" element={<Order />}/>}
+            {userRef.current != null && (userRef.current.type === 1) && <Route path="/addFood" element={<AddFood />}/>}
+            {userRef.current != null && (userRef.current.type === 1) && <Route path="/manageOrders" element={<ManageOrders />}/>}
+            {userRef.current != null && (userRef.current.type === 1) && <Route path="/createRestaurant" element={<CreateRestaurant />}/>}
+            {userRef.current != null && (userRef.current.type === 1) && <Route path="/exportPDF"/>}
         </Routes>
     </BrowserRouter>)
 }

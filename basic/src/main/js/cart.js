@@ -50,6 +50,8 @@ function Cart() {
         <div>
             <TopBar/>
             <OrderMenu foods={foods}/>
+            <input type="text" id="address" placeholder="Address"/>
+            <input type="text" id="special" placeholder="Special Requirements"/>
             <button type="button" className="btn btn-success" onClick={() => {
                 setShowModal(true)
                 setTimeout(function() { //Start the timer
@@ -61,7 +63,8 @@ function Cart() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({})
                 };
-                fetch("http://localhost:8080/database/orderCart", requestOptions)
+                console.log(document.getElementById("address").value)
+                fetch("http://localhost:8080/database/orderCart?address=" + document.getElementById("address").value + "&special=" + document.getElementById("special").value, requestOptions)
             }}>
                 Order
             </button>

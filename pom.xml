@@ -57,77 +57,96 @@
 								<arguments>install react-router</arguments>
 							</configuration>
 						</execution>
-						<execution>
-							<id>npm install react-router-dom</id>
-							<goals>
-								<goal>npm</goal>
-							</goals>
-							<configuration>
-								<arguments>install react-router-dom</arguments>
-							</configuration>
-						</execution>
-						<execution>
-							<id>npm install react-router-config</id>
-							<goals>
-								<goal>npm</goal>
-							</goals>
-							<configuration>
-								<arguments>install react-router-config</arguments>
-							</configuration>
-						</execution>
-						<execution>
-							<id>npm install md5</id>
-							<goals>
-								<goal>npm</goal>
-							</goals>
-							<configuration>
-								<arguments>install md5</arguments>
-							</configuration>
-						</execution>
-						<execution>
-							<id>npm install react-bootstrap</id>
-							<goals>
-								<goal>npm</goal>
-							</goals>
-							<configuration>
-								<arguments>install react-bootstrap</arguments>
-							</configuration>
-						</execution>
-						<execution>
-							<id>npm i -D babel-core babel-polyfill babel-preset-es2015 babel-preset-stage-0 babel-loader</id>
-							<goals>
-								<goal>npm</goal>
-							</goals>
-							<configuration>
-								<arguments>i -D babel-core babel-polyfill babel-preset-es2015 babel-preset-stage-0 babel-loader</arguments>
-							</configuration>
-						</execution>
-						<execution>
-							<id>npm i axios</id>
-							<goals>
-								<goal>npm</goal>
-							</goals>
-							<configuration>
-								<arguments>i axios</arguments>
-							</configuration>
-						</execution>
-						<execution>
-							<id>npm i stream-length</id>
-							<goals>
-								<goal>npm</goal>
-							</goals>
-							<configuration>
-								<arguments>i stream-length</arguments>
-							</configuration>
-						</execution>!-->
-						<execution>
-							<id>webpack build</id>
-							<goals>
-								<goal>webpack</goal>
-							</goals>
-						</execution>
+                        <execution>
+                            <id>npm install react-router-dom</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>install react-router-dom</arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>npm install react-router-config</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>install react-router-config</arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>npm install md5</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>install md5</arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>npm install react-bootstrap</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>install react-bootstrap</arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>npm i -D babel-core babel-polyfill babel-preset-es2015 babel-preset-stage-0 babel-loader</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>i -D babel-core babel-polyfill babel-preset-es2015 babel-preset-stage-0 babel-loader</arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>npm i axios</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>i axios</arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>npm i stream-length</id>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>i stream-length</arguments>
+                            </configuration>
+                        </execution>!-->
+                        <execution>
+                            <id>webpack build</id>
+                            <goals>
+                                <goal>webpack</goal>
+                            </goals>
+                        </execution>
 					</executions>
 				</plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.7.9</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>generate-code-coverage-report</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 				<!-- end::frontend-maven-plugin[] -->
 			</plugins>
 		</pluginManagement>

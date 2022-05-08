@@ -46,6 +46,21 @@ function TopBar() {
                     {user != null && (user.type === 1) && (user.newAdmin === 0) && <button type="button" class="btn btn-info" onClick={() => navigate('/addFood')}>Add Food</button>}
                     {user != null && (user.type === 1) && (user.newAdmin === 0) && <button type="button" class="btn btn-info" onClick={() => navigate('/manageOrders')}>Manage Orders</button>}
                     {user != null && (user.type === 1) && (user.newAdmin === 1) && <button type="button" class="btn btn-info" onClick={() => navigate('/createRestaurant')}>Create Restaurant</button>}
+                    {user != null && (user.type === 1) && (user.newAdmin === 0) && <button type="button" class="btn btn-info" onClick={() => {
+                        fetch('http://localhost:8080/exportPDF')
+                            .then(response => {
+                                //const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+                                const filename = "menu.pdf"
+                                //print("???? + " + filename)
+                                response.blob().then(blob => {
+                                    let url = window.URL.createObjectURL(blob);
+                                    let a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = filename;
+                                    a.click();
+                                });
+                            })
+                    }}>Export PDF</button>}
                     <button type="button" class="btn btn-primary" onClick={() => navigate('/signup')}>Signup</button>
                 </Navbar.Collapse>
             </Container>

@@ -16,10 +16,12 @@ public class Order {
     private String userName;
 
     public Order(Integer restaurantID, Integer userID, String foodsOrdered, Integer statusOrder) {
+
         this.restaurantID = restaurantID;
         this.userID = userID;
         this.foodsOrdered = foodsOrdered;
         this.statusOrder = statusOrder;
+
     }
 
     public Order() {

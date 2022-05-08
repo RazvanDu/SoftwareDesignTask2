@@ -15,89 +15,102 @@
  */
 package com.RazvanDu.project.controller;
 
-import com.RazvanDu.project.model.*;
-import org.apache.coyote.Response;
-import org.hibernate.Session;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.swing.plaf.BorderUIResource;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
+/**
+ * The type Home controller.
+ */
 @Controller
 public class HomeController {
 
-    private UserRepository userRepository;
-    private RestaurantRepository restaurantRepository;
-    private FoodRepository foodRepository;
-    private OrderRespository orderRespository;
-
-    public HomeController(UserRepository userRepository, RestaurantRepository restaurantRepository, FoodRepository foodRepository, OrderRespository orderRespository) {
-        this.userRepository = userRepository;
-        this.restaurantRepository = restaurantRepository;
-        this.foodRepository = foodRepository;
-        this.orderRespository = orderRespository;
-    }
-
+    /**
+     * Index page.
+     *
+     * @return the string
+     */
     @RequestMapping(value = "/")
     public String index() {
         return "index";
     }
 
+    /**
+     * Dashboard page.
+     *
+     * @return the string
+     */
     @RequestMapping(value = "/dashboard")
     public String dashboard() {
-        System.out.println("On Dashboard");
         return "index";
     }
 
+    /**
+     * Preferences page.
+     *
+     * @return the string
+     */
     @RequestMapping(value = "/preferences")
     public String preferences() {
-        System.out.println("On Preferences");
         return "index";
     }
 
+    /**
+     * Login page.
+     *
+     * @return the string
+     */
     @RequestMapping(value = "/login")
     public String login() {
-        System.out.println("On Login");
         return "index";
     }
 
+    /**
+     * Signup page.
+     *
+     * @return the string
+     */
     @RequestMapping(value = "/signup")
     public String signup() {
-        System.out.println("On Signup");
         return "index";
     }
 
+    /**
+     * Cart page.
+     *
+     * @return the string
+     */
     @RequestMapping(value = "/cart")
     public String cart() {
-        System.out.println("On Cart");
         return "index";
     }
 
+    /**
+     * Order page.
+     *
+     * @return the string
+     */
     @RequestMapping(value = "/order")
     public String orderr() {
-        System.out.println("On Order");
         return "index";
     }
 
+    /**
+     * Add food page.
+     *
+     * @return the string
+     */
     @RequestMapping(value = "/addFood")
     public String addFood() {
-        System.out.println("On Add Food");
         return "index";
     }
 
+    /**
+     * Manage orders page.
+     *
+     * @return the string
+     */
     @RequestMapping(value = "/manageOrders")
     public String manageOrders() {
-        System.out.println("On Manage Orders");
         return "index";
     }
 

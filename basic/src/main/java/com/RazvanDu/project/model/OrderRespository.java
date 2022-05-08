@@ -21,7 +21,8 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface OrderRespository extends CrudRepository<Order, Long> { // <1>
+public interface OrderRespository extends CrudRepository<Order, Long> {
+
     Optional<Order> findById(Integer id);
 
     List<Order> findAllByUserID(Integer id);
@@ -30,4 +31,5 @@ public interface OrderRespository extends CrudRepository<Order, Long> { // <1>
 
     @Query(value = "SELECT * FROM orderr orr WHERE orr.userID = ?1 AND (orr.status_order = 1 OR orr.status_order = 2 OR orr.status_order = 3)", nativeQuery = true)
     Optional<Order> findCurrentOrder(Integer userID);
+
 }
